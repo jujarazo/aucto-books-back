@@ -1,5 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
+import { CreateAuthorDto } from './dto/create-author.dto';
+import { Author } from './interfaces/author.interface';
 
 @Controller('authors')
 export class AuthorsController {
@@ -8,5 +10,10 @@ export class AuthorsController {
   @Get()
   async findAll() {
     return this.authorsService.findAll();
+  }
+
+  @Post()
+  create(@Body() createAuthorDto: CreateAuthorDto): Promise<Author> {
+    return this.authorsService.create(createAuthorDto);
   }
 }
