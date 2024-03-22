@@ -4,12 +4,25 @@ import { Model } from 'mongoose';
 import { Author } from './interfaces/author.interface';
 import { CreateAuthorDto } from './dto/create-author.dto';
 
+type AuthorNameFilter = {
+  name?: RegExp;
+};
 @Injectable()
 export class AuthorsService {
   constructor(@InjectModel('Author') private authorModel: Model<Author>) {}
 
-  async findAll(): Promise<Author[]> {
-    return await this.authorModel.find().exec();
+  async findAll(nameFilter: string): Promise<Author[]> {
+    const filters: AuthorNameFilter = {};
+
+    if (nameFilter) {
+      filters.name = new RegExp(nameFilter, 'i');
+    }
+
+    return await this.authorModel.find(filters).exec();
+  }
+
+  async findOne(id: string): Promise<Author> {
+    return await this.authorModel.findById(id).exec();
   }
 
   async create(createAuthor: CreateAuthorDto): Promise<Author> {

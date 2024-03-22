@@ -10,5 +10,6 @@ import { AuthorSchema } from './schemas';
   ],
   providers: [AuthorsService],
   controllers: [AuthorsController],
+  exports: [AuthorsService],
 })
 export class AuthorsModule {}

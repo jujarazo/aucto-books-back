@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { Author } from './interfaces/author.interface';
@@ -8,8 +8,8 @@ export class AuthorsController {
   constructor(private authorsService: AuthorsService) {}
 
   @Get()
-  async findAll() {
-    return this.authorsService.findAll();
+  async findAll(@Query('name') nameFilter: string) {
+    return this.authorsService.findAll(nameFilter);
   }
 
   @Post()
