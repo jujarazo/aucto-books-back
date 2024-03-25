@@ -12,7 +12,32 @@ export class BooksService {
     private readonly authorsService: AuthorsService,
   ) {}
 
-  async findAll(): Promise<Book[]> {
+  async findAll(withAuthorName = false): Promise<Book[]> {
+    if (withAuthorName) {
+      // Aggregate the author name to the book response to show in the FE
+      return await this.bookModel.aggregate([
+        {
+          $lookup: {
+            from: 'authors',
+            localField: 'authorId',
+            foreignField: '_id',
+            as: 'authorInfo',
+          },
+        },
+        {
+          $unwind: '$authorInfo',
+        },
+        {
+          $project: {
+            name: 1,
+            description: 1,
+            authorId: 1,
+            authorName: '$authorInfo.name',
+          },
+        },
+      ]);
+    }
+
     return await this.bookModel.find().exec();
   }
 

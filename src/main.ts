@@ -4,6 +4,9 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.setGlobalPrefix('api');
+  // Add a validation pipe to format the endpoints validation errors
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -24,6 +27,7 @@ async function bootstrap() {
       },
     }),
   );
+
   await app.listen(8080);
 }
 bootstrap();
