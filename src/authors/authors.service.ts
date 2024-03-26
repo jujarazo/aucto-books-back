@@ -26,6 +26,7 @@ export class AuthorsService {
   }
 
   async create(createAuthor: CreateAuthorDto): Promise<Author> {
+    // Check if author with the same name already exists
     const sameNameExists = await this.authorModel.findOne({
       name: createAuthor.name,
     });

@@ -34,12 +34,15 @@ export class BooksController {
   @Sse('subscribe')
   subscribeToBooks(): Observable<MessageEvent> {
     return new Observable((subscriber) => {
+      // Create a listener function to send a message to the subscribed clients
       const listener = () => {
         subscriber.next({ data: 'Book created' });
       };
 
+      // Subscribe to the 'bookCreated' event
       this.booksEventEmitter.subscribeToBookCreatedEvent(listener);
 
+      // Return a cleanup function to remove the listener when the client unsubscribes
       return () => {
         this.booksEventEmitter.unsubscribeFromBookCreatedEvent(listener);
       };

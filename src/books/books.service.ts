@@ -56,6 +56,7 @@ export class BooksService {
 
     const createdBook = new this.bookModel(createBookDto);
 
+    // Emit the event to notify the subscribed clients
     this.booksEventEmitter.emitBookCreatedEvent();
 
     return await createdBook.save();
