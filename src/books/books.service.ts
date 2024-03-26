@@ -4,12 +4,14 @@ import { Model } from 'mongoose';
 import { Book } from './interfaces/book.interface';
 import { CreateBookDto } from './dto/create-book.dto';
 import { AuthorsService } from 'src/authors/authors.service';
+import { BooksEventsEmitter } from './books.events.emitter';
 
 @Injectable()
 export class BooksService {
   constructor(
     @InjectModel('Book') private readonly bookModel: Model<Book>,
     private readonly authorsService: AuthorsService,
+    private readonly booksEventEmitter: BooksEventsEmitter,
   ) {}
 
   async findAll(withAuthorName = false): Promise<Book[]> {
@@ -53,6 +55,9 @@ export class BooksService {
     }
 
     const createdBook = new this.bookModel(createBookDto);
+
+    this.booksEventEmitter.emitBookCreatedEvent();
+
     return await createdBook.save();
   }
 }
